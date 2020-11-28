@@ -9,5 +9,5 @@ setup(
     license='',
     author='Kai Jensen',
     author_email='kajens17@stlawu.edu',
-    description='Python Portfolio Management CLI tool'
+    description='Python Portfolio Management CLI Tool'
 )

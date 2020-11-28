@@ -72,12 +72,23 @@ def select_stock(portfolio_list, portfolio_selected):
 def portfolio_management_tools(portfolio_management_action, portfolio_list, portfolio_selected):
     # change portfolio name
     if portfolio_management_action == 0:
-        portfolio_list[portfolio_selected].name = prompt.shortcuts.input_dialog(
-            title="Portfolio Name", text="Please type a new portfolio name:"
-        ).run()
+        change_portfolio_name(portfolio_list, portfolio_selected)
     # remove portfolio
     elif portfolio_management_action == 1:
         pass
     # remove equity
     elif portfolio_management_action == 2:
-        pass
+        stock_selected = select_stock(portfolio_list, portfolio_selected)
+        portfolio_list[portfolio_selected].stock_list.remove(stock_selected)
+
+def index_of_name(l, name):
+    for i in range(len(l)):
+        if l[i].ticker == name:
+            return i
+    return -1
+
+
+def change_portfolio_name(portfolio_list, portfolio_selected):
+    portfolio_list[portfolio_selected].name = prompt.shortcuts.input_dialog(
+        title="Portfolio Name", text="Please type a new portfolio name:"
+    ).run()
