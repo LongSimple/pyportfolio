@@ -22,11 +22,13 @@ def selectPortfolio(portfolio_list):
 
 
 def addStockFlow(stock_list):
+    # no error checking here yet
     run = 0
     while run == 0:
-        stock_name = prompt.shortcuts.input_dialog(
-            title="Stock Name", text="Please type the stock name:"
-        ).run()
+        while True:
+            stock_name = prompt.shortcuts.input_dialog(
+                title="Stock Name", text="Please type the stock name:"
+            ).run()
         stock_ticker = prompt.shortcuts.input_dialog(
             title="Stock Ticker", text="Please type the stock ticker in all caps:"
         ).run()
@@ -40,14 +42,18 @@ def addStockFlow(stock_list):
 
 
 def newPortfolioFlow(portfolioList):
-    portfolio_name = prompt.shortcuts.input_dialog(
-        title="Portfolio Name", text="Please type the portfolio name:"
-    ).run()
-    portfolio_id: int = len(portfolioList)
-    stock_list = []
-    stock_list = addStockFlow(stock_list)
-    portfolioList.append(ptools.Portfolio(portfolio_name, portfolio_id, stock_list))
-    return portfolioList
+    while True:
+        portfolio_name = prompt.shortcuts.input_dialog(
+            title="Portfolio Name", text="Please type the portfolio name:"
+        ).run()
+        if portfolio_name is not None:
+            portfolio_id: int = len(portfolioList)
+            stock_list = []
+            stock_list = addStockFlow(stock_list)
+            portfolioList.append(ptools.Portfolio(portfolio_name, portfolio_id, stock_list))
+            return portfolioList
+        if portfolio_name is None:
+            return None
 
 
 def selectStock(portfolio_list, portfolio_selected):
@@ -69,6 +75,7 @@ def selectStockAction(portfolio_list, portfolio_selected, portfolio_stock_choice
     ).run()
     return portfolio_stock_action
 
+
 def initTestData():
     apple = ptools.Stock("Apple", "AAPL")
     microsoft = ptools.Stock("Microsoft", "MSFT")
@@ -76,6 +83,54 @@ def initTestData():
     testPortfolio2 = ptools.Portfolio("Liam Portfolio", 1, [apple])
     portfolio_list = [testPortfolio, testPortfolio2]
     return portfolio_list
+
+
+def show_main_menu():
+    main_menu_selection = prompt.shortcuts.radiolist_dialog(
+        values=[(0, "New Portfolio"), (1, "Existing Portfolio")],
+        title="Main Menu",
+        text="Please select an option:",
+    ).run()
+    return main_menu_selection
+
+
+def select_portfolio_action(portfolio_list, portfolio_selected):
+    portfolio_action = prompt.shortcuts.radiolist_dialog(
+        values=[(0, "Show Portfolio"), (1, "Manage Portfolio")],
+        title=f"{portfolio_list[portfolio_selected].name}",
+        text=f"Please select an action:",
+    ).run()
+    return portfolio_action
+
+
+def show_portfolio_stock_action_menu(portfolio_stock_action):
+    if portfolio_stock_action == 0:
+        result = prompt.shortcuts.button_dialog(
+            title="Current Market Capitalization",
+            text="The current market capitalization is:",
+            buttons=[("Okay", "ok")],
+        ).run()
+    elif portfolio_stock_action == 1:
+        result = prompt.shortcuts.button_dialog(
+            title="Upcoming Earnings Date",
+            text="The next earnings date is:",
+            buttons=[("Okay", "ok")],
+        ).run()
+    elif portfolio_stock_action == 2:
+        result = prompt.shortcuts.button_dialog(
+            title="Analyst Ratings",
+            text="The average analyst rating is:",
+            buttons=[("Okay", "ok")],
+        ).run()
+
+
+def select_portfolio_management_action(portfolio_list, portfolio_selected):
+    portfolio_management_action = prompt.shortcuts.radiolist_dialog(
+        values=[(0, "Change Portfolio Name"), (1, "Remove Portfolio"), (2, "Remove Equity")],
+        title=f"{portfolio_list[portfolio_selected].name}",
+        text=f"Please select an action:",
+    ).run()
+    return portfolio_management_actions
 
 def main():
     # print(art.text2art('L33T Portfolio Manager'))
@@ -86,88 +141,56 @@ def main():
     #      add profit calculation and percent change calculation
     #      add portfolio tools (date purchased, amount purchased, price)
 
-    # test data
+    # test data import
+    # next: add database import to portfolio list flow
+
     portfolio_list = initTestData()
 
-    # add database import to portfolio list flow
-
-
-    main_menu_selection = prompt.shortcuts.radiolist_dialog(
-        values=[(0, "New Portfolio"), (1, "Existing Portfolio")],
-        title="Main Menu",
-        text="Please select an option:",
-    ).run()
-    if main_menu_selection == 0:
-        portfolio_list = newPortfolioFlow(portfolio_list)
-        main_menu_selection = 2
-
-    if main_menu_selection == 1:
-        portfolio_selected = selectPortfolio(portfolio_list)
-        portfolio_action = prompt.shortcuts.radiolist_dialog(
-            values=[(0, "Show Portfolio"), (1, "Manage Portfolio")],
-            title=f"{portfolio_list[portfolio_selected].name}",
-            text=f"Please select an action:",
-        ).run()
-
-
-
-
-
-    # make menu exit on cancel
-    # main_menu_selection = 2
-    # while main_menu_selection == 2:
-    #     main_menu_selection = prompt.shortcuts.radiolist_dialog(
-    #         values=[(0, "New Portfolio"), (1, "Existing Portfolio")],
-    #         title="Main Menu",
-    #         text="Please select an option:",
-    #     ).run()
-    #     if main_menu_selection == 0:
-    #         portfolio_list = newPortfolioFlow(portfolio_list)
-    #         main_menu_selection = 2
-    #
-    #     if main_menu_selection == 1:
-    #         portfolio_selected = selectPortfolio(portfolio_list)
-    #         portfolio_action = prompt.shortcuts.radiolist_dialog(
-    #             values=[(0, "Show Portfolio"), (1, "Manage Portfolio")],
-    #             title=f"{portfolio_list[portfolio_selected].name}",
-    #             text=f"Please select an action:",
-    #         ).run()
-    #         if portfolio_action == 0:
-    #             portfolio_stock_choice = selectStock(portfolio_list, portfolio_selected)
-    #             portfolio_stock_action = selectStockAction(portfolio_list, portfolio_selected, portfolio_stock_choice)
-    #             # make these tools work
-    #             if portfolio_stock_action == 0:
-    #                 result = prompt.shortcuts.button_dialog(
-    #                     title="Current Market Capitalization",
-    #                     text="The current market capitalization is:",
-    #                     buttons=[("Okay", "ok")],
-    #                 ).run()
-    #             elif portfolio_stock_action == 1:
-    #                 result = prompt.shortcuts.button_dialog(
-    #                     title="Upcoming Earnings Date",
-    #                     text="The next earnings date is:",
-    #                     buttons=[("Okay", "ok")],
-    #                 ).run()
-    #             elif portfolio_stock_action == 2:
-    #                 result = prompt.shortcuts.button_dialog(
-    #                     title="Analyst Ratings",
-    #                     text="The average analyst rating is:",
-    #                     buttons=[("Okay", "ok")],
-    #                 ).run()
-    #             main_menu_selection = 2
-    #         if portfolio_action == 1:
-    #             portfolio_management_action = prompt.shortcuts.radiolist_dialog(
-    #                 values=[(0, "Change Portfolio Name"), (1, "Remove Portfolio"), (2, "Remove Equity")],
-    #                 title=f"{portfolio_list[portfolio_selected].name}",
-    #                 text=f"Please select an action:",
-    #             ).run()
-    #             # add portfolio management tools (change portfolio name, remove portfolio, remove equity)
-    #             if portfolio_management_action == 0:
-    #                 pass
-    #             elif portfolio_management_action == 1:
-    #                 pass
-    #             elif portfolio_management_action == 2:
-    #                 pass
+    while True:
+        main_menu_selection = show_main_menu()
+        if main_menu_selection is None:
+            exit()
+        if main_menu_selection == 0:
+            portfolio_list2 = newPortfolioFlow(portfolio_list)
+            if portfolio_list2 is None:
+                portfolio_list = portfolio_list
+            else:
+                portfolio_list = portfolio_list2
+        if main_menu_selection == 1:
+            while True:
+                portfolio_selected = selectPortfolio(portfolio_list)
+                if portfolio_selected is None:
+                    break
+                while True:
+                    portfolio_action = select_portfolio_action(portfolio_list, portfolio_selected)
+                    if portfolio_action is None:
+                        break
+                    if portfolio_action == 0:
+                        while True:
+                            portfolio_stock_choice = selectStock(portfolio_list, portfolio_selected)
+                            if portfolio_stock_choice is None:
+                                break
+                            while True:
+                                portfolio_stock_action = selectStockAction(portfolio_list, portfolio_selected,
+                                                                           portfolio_stock_choice)
+                                if portfolio_stock_action is None:
+                                    break
+                                while True:
+                                    result = show_portfolio_stock_action_menu(portfolio_stock_action)
+                                    if result is None:
+                                        break
+                    elif portfolio_action == 1:
+                        portfolio_management_action = select_portfolio_management_action(portfolio_list, portfolio_selected)
+                        # add portfolio management tools (change portfolio name, remove portfolio, remove equity)
+                        #change portfolio name
+                        if portfolio_management_action == 0:
+                            pass
+                        #remove portfolio
+                        elif portfolio_management_action == 1:
+                            pass
+                        #remove equity
+                        elif portfolio_management_action == 2:
+                            pass
 
 
 # issues with new portfolio flow:
