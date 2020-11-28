@@ -58,7 +58,7 @@ def main():
                                 if portfolio_stock_action is None:
                                     break
                                 while True:
-                                    result = show_portfolio_stock_action_menu(portfolio_stock_action)
+                                    result = show_portfolio_stock_action_menu(portfolio_stock_action, portfolio_stock_choice)
                                     if result is None:
                                         break
                     elif portfolio_action == 1:
