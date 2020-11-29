@@ -8,9 +8,6 @@ from pyportfolio.action_menus import show_main_menu, select_stock_action, show_p
 from pyportfolio.portfolio_utils import select_portfolio, new_portfolio_flow, select_stock, Portfolio, Stock, \
     portfolio_management_tools, remove_portfolio
 
-logging.basicConfig(filename='../log.txt', level=logging.DEBUG)
-
-
 def initTestData():
     apple = Stock("Apple", "AAPL")
     microsoft = Stock("Microsoft", "MSFT")
@@ -21,9 +18,6 @@ def initTestData():
 
 
 def main(first_run, portfolio_list):
-    # Date based actions:
-    #      add profit calculation and percent change calculation
-    #      add portfolio tools (date purchased, amount purchased, price)
     if first_run == 1:
         pickle.dump(portfolio_list, open("portfolio_list.pkl", "wb"))
     pickle.dump(portfolio_list, open("portfolio_list.pkl", "wb"))
@@ -67,12 +61,6 @@ def main(first_run, portfolio_list):
                         portfolio_management_tools(portfolio_management_action, portfolio_list, portfolio_selected)
         if main_menu_selection == 2:
             remove_portfolio(portfolio_list)
-
-# issues with new portfolio flow:
-# Requires stock name could automatically draw stock name from ticker
-# doesnt check validity of stock name and ticker inputs
-# cancel doesnt bring you back to main menu
-
 
 if __name__ == '__main__':
     file_exists = os.path.isfile("portfolio_list.pkl")
