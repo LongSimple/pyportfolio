@@ -27,14 +27,17 @@ def add_stock_flow(stock_list):
     # no error checking here yet
     run = 0
     while run == 0:
-        while True:
+        stock_name = None
+        stock_ticker = None
+        while stock_name is None:
             stock_name = prompt.shortcuts.input_dialog(
                 title="Stock Name", text="Please type the stock name:"
-            ).run()
-        stock_ticker = prompt.shortcuts.input_dialog(
-            title="Stock Ticker", text="Please type the stock ticker in all caps:"
-        ).run()
-        stock_list.append(ptools.Stock(stock_name, stock_ticker))
+                ).run()
+        while stock_ticker is None:
+            stock_ticker = prompt.shortcuts.input_dialog(
+                title="Stock Ticker", text="Please type the stock ticker in all caps:"
+                ).run()
+        stock_list.append(Stock(stock_name, stock_ticker))
         run = prompt.shortcuts.button_dialog(
             title="Add Another Stock",
             text="Would you like to add another stock?",
@@ -79,7 +82,11 @@ def portfolio_management_tools(portfolio_management_action, portfolio_list, port
     # remove equity
     elif portfolio_management_action == 2:
         stock_selected = select_stock(portfolio_list, portfolio_selected)
-        portfolio_list[portfolio_selected].stock_list.remove(stock_selected)
+        index_of_stock_selected = index_of_name(portfolio_list[portfolio_selected].stock_list, stock_selected)
+        portfolio_list[portfolio_selected].stock_list.pop(index_of_stock_selected)
+    #add equity
+    elif portfolio_management_action == 3:
+        portfolio_list[portfolio_selected].stock_list = add_stock_flow(portfolio_list[portfolio_selected].stock_list)
 
 def index_of_name(l, name):
     for i in range(len(l)):

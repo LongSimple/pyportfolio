@@ -60,7 +60,7 @@ def get_quote_table_field(field, ticker):
 
 def show_portfolio_management_action_menu(portfolio_list, portfolio_selected):
     portfolio_management_action = prompt.shortcuts.radiolist_dialog(
-        values=[(0, "Change Portfolio Name"), (1, "Remove Portfolio"), (2, "Remove Equity")],
+        values=[(0, "Change Portfolio Name"), (1, "Remove Portfolio"), (2, "Remove Equity"), (3, "Add Equity")],
         title=f"{portfolio_list[portfolio_selected].name}",
         text=f"Please select an action:",
     ).run()
