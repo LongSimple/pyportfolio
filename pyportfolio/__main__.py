@@ -8,14 +8,6 @@ from pyportfolio.action_menus import show_main_menu, select_stock_action, show_p
 from pyportfolio.portfolio_utils import select_portfolio, new_portfolio_flow, select_stock, Portfolio, Stock, \
     portfolio_management_tools, remove_portfolio
 
-def initTestData():
-    apple = Stock("Apple", "AAPL")
-    microsoft = Stock("Microsoft", "MSFT")
-    test_portfolio = Portfolio("Kai Portfolio", 0, [apple, microsoft])
-    test_portfolio2 = Portfolio("Liam Portfolio", 1, [apple])
-    portfolio_list = [test_portfolio, test_portfolio2]
-    return portfolio_list
-
 
 def main(first_run, portfolio_list):
     if first_run == 1:
