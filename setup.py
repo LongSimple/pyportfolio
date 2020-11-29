@@ -4,7 +4,7 @@ setup(
     name='pyportfolio',
     version='0.1.0',
     packages=['pyportfolio'],
-    install_requires = ['pandas'],
+    install_requires=[],
     url='',
     license='',
     author='Kai Jensen',

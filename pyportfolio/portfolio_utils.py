@@ -72,28 +72,34 @@ def select_stock(portfolio_list, portfolio_selected):
 
 
 # could make this a set of different functions
+def remove_portfolio(portfolio_list):
+    index = index_of_portfolio_id(portfolio_list,select_portfolio(portfolio_list))
+    portfolio_list.pop(index)
+
 def portfolio_management_tools(portfolio_management_action, portfolio_list, portfolio_selected):
     # change portfolio name
     if portfolio_management_action == 0:
         change_portfolio_name(portfolio_list, portfolio_selected)
-    # remove portfolio
-    elif portfolio_management_action == 1:
-        pass
     # remove equity
-    elif portfolio_management_action == 2:
+    elif portfolio_management_action == 1:
         stock_selected = select_stock(portfolio_list, portfolio_selected)
-        index_of_stock_selected = index_of_name(portfolio_list[portfolio_selected].stock_list, stock_selected)
+        index_of_stock_selected = index_of_ticker(portfolio_list[portfolio_selected].stock_list, stock_selected)
         portfolio_list[portfolio_selected].stock_list.pop(index_of_stock_selected)
     #add equity
-    elif portfolio_management_action == 3:
+    elif portfolio_management_action == 2:
         portfolio_list[portfolio_selected].stock_list = add_stock_flow(portfolio_list[portfolio_selected].stock_list)
 
-def index_of_name(l, name):
+def index_of_ticker(l, name):
     for i in range(len(l)):
         if l[i].ticker == name:
             return i
     return -1
 
+def index_of_portfolio_id(l, name):
+    for i in range(len(l)):
+        if l[i].portfolio_id == name:
+            return i
+    return -1
 
 def change_portfolio_name(portfolio_list, portfolio_selected):
     portfolio_list[portfolio_selected].name = prompt.shortcuts.input_dialog(

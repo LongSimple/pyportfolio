@@ -1,10 +1,12 @@
 #!/usr/bin/env python
 import logging
+import pickle
+import os.path
 
 from pyportfolio.action_menus import show_main_menu, select_stock_action, show_portfolio_action_menu, \
     show_portfolio_stock_action_menu, show_portfolio_management_action_menu
 from pyportfolio.portfolio_utils import select_portfolio, new_portfolio_flow, select_stock, Portfolio, Stock, \
-    portfolio_management_tools
+    portfolio_management_tools, remove_portfolio
 
 logging.basicConfig(filename='../log.txt', level=logging.DEBUG)
 
@@ -18,19 +20,17 @@ def initTestData():
     return portfolio_list
 
 
-def main():
+def main(first_run, portfolio_list):
     # Date based actions:
     #      add profit calculation and percent change calculation
     #      add portfolio tools (date purchased, amount purchased, price)
-
-    # test data import
-    # next: add database import to portfolio list flow
-
-    portfolio_list = initTestData()
-
+    if first_run == 1:
+        pickle.dump(portfolio_list, open("portfolio_list.pkl", "wb"))
+    pickle.dump(portfolio_list, open("portfolio_list.pkl", "wb"))
     while True:
         main_menu_selection = show_main_menu()
         if main_menu_selection is None:
+            pickle.dump(portfolio_list, open("portfolio_list.pkl", "wb"))
             exit()
         if main_menu_selection == 0:
             portfolio_list2 = new_portfolio_flow(portfolio_list)
@@ -65,7 +65,8 @@ def main():
                         portfolio_management_action = show_portfolio_management_action_menu(portfolio_list,
                                                                                             portfolio_selected)
                         portfolio_management_tools(portfolio_management_action, portfolio_list, portfolio_selected)
-
+        if main_menu_selection == 2:
+            remove_portfolio(portfolio_list)
 
 # issues with new portfolio flow:
 # Requires stock name could automatically draw stock name from ticker
@@ -74,4 +75,14 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    file_exists = os.path.isfile("portfolio_list.pkl")
+    if file_exists:
+        first_run = 0
+        portfolio_list = pickle.load(open("portfolio_list.pkl", "rb"))
+        main(first_run, portfolio_list)
+    else:
+        first_run = 1
+        f = open("portfolio_list.pkl", "w")
+        portfolio_list = []
+        portfolio_list = new_portfolio_flow(portfolio_list)
+        main(first_run, portfolio_list)

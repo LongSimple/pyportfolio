@@ -13,6 +13,11 @@
 # Generated files
 .idea/**/contentModel.xml
 
+#pickle
+*.csv
+*.pkl
+
+
 # Sensitive or high-churn files
 .idea/**/dataSources/
 .idea/**/dataSources.ids
