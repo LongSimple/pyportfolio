@@ -1,29 +1,26 @@
 from datetime import date as d  # https://docs.python.org/3/library/datetime.html#datetime.date
 import prompt_toolkit as prompt  # https://python-prompt-toolkit.readthedocs.io/en/master/
-# api_key=H5BDQ0DGNCED6EAU
-from alpha_vantage.timeseries import TimeSeries
-# add unique portfolio id to make indexing better
-from yahoo_fin import stock_info as si
-
+from alpha_vantage.timeseries import TimeSeries # https://alpha-vantage.readthedocs.io/en/latest/
+from yahoo_fin import stock_info as si # http://theautomatic.net/yahoo_fin-documentation/
 import pyportfolio.action_menus as am
-
 ts = TimeSeries(key='H5BDQ0DGNCED6EAU', output_format='pandas')
 
 
 class Portfolio:
     def __init__(self, name, portfolio_id, stock_list):
         self.name = name
+        # add unique portfolio id to make indexing better
         self.portfolio_id = portfolio_id
         self.stock_list = stock_list
 
 
-# add unique stock_id to make indexing better
 class Stock:
     def __init__(self, name, stock_ticker, quantity, purchase_date, stock_id=0):
         self.name = name
         self.stock_ticker = stock_ticker
         self.purchase_date = purchase_date
         self.quantity = quantity
+        # add unique stock_id to make indexing better
         self.stock_id = stock_id
         data, meta_data = ts.get_daily(symbol=stock_ticker, outputsize='full')
         self.data = data
