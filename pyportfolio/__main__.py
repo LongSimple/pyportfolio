@@ -6,9 +6,11 @@ import os.path
 from pyportfolio.action_menus import show_main_menu, select_stock_action, show_portfolio_action_menu, \
     show_portfolio_stock_action_menu, show_portfolio_management_action_menu
 from pyportfolio.portfolio_utils import select_portfolio, new_portfolio_flow, select_stock, Portfolio, Stock, \
-    portfolio_management_tools, remove_portfolio
+    portfolio_management_tools, remove_portfolio, select_stock_object
+
 
 #add date based tools and notes for each method and refactor
+#stock objects are not unique so if you create two of the same stock it breaks
 #date purchased
 #amount purchased
 #percent change from date purchased
@@ -38,7 +40,7 @@ def main(first_run, portfolio_list):
                         break
                     if portfolio_action == 0:
                         while True:
-                            portfolio_stock_choice = select_stock(portfolio_list, portfolio_selected)
+                            portfolio_stock_choice = select_stock_object(portfolio_list, portfolio_selected)
                             if portfolio_stock_choice is None:
                                 break
                             while True:

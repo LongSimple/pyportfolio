@@ -10,11 +10,12 @@ class Portfolio:
 
 
 class Stock:
-    def __init__(self, name, ticker, amount_purchased, purchase_date=d.today):
+    def __init__(self, name, ticker, amount_purchased, purchase_date=d.today, stock_id = 0):
         self.name = name
         self.ticker = ticker
         self.purchase_date = purchase_date
         self.amount_purchased = amount_purchased
+        self.stock_id = stock_id
 
 
 def select_portfolio(portfolio_list):
@@ -78,6 +79,15 @@ def new_portfolio_flow(portfolio_list):
 def select_stock(portfolio_list, portfolio_selected):
     portfolio_stock_choice = prompt.shortcuts.radiolist_dialog(
         values=[(x.ticker, x.name) for x in
+                [x.stock_list for x in portfolio_list if x.portfolio_id == portfolio_selected][0]],
+        title="Portfolio Overview",
+        text="Please select a stock:",
+    ).run()
+    return portfolio_stock_choice
+
+def select_stock_object(portfolio_list, portfolio_selected):
+    portfolio_stock_choice = prompt.shortcuts.radiolist_dialog(
+        values=[(x, x.name) for x in
                 [x.stock_list for x in portfolio_list if x.portfolio_id == portfolio_selected][0]],
         title="Portfolio Overview",
         text="Please select a stock:",
