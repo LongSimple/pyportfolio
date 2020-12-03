@@ -8,7 +8,10 @@ from pyportfolio.action_menus import show_main_menu, select_stock_action, show_p
 from pyportfolio.portfolio_utils import select_portfolio, new_portfolio_flow, select_stock, Portfolio, Stock, \
     portfolio_management_tools, remove_portfolio
 
-
+#add date based tools and notes for each method and refactor
+#date purchased
+#amount purchased
+#percent change from date purchased
 def main(first_run, portfolio_list):
     if first_run == 1:
         pickle.dump(portfolio_list, open("portfolio_list.pkl", "wb"))

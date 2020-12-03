@@ -1,4 +1,5 @@
-import prompt_toolkit as prompt
+from datetime import date as d  #https://docs.python.org/3/library/datetime.html#datetime.date
+import prompt_toolkit as prompt #https://python-prompt-toolkit.readthedocs.io/en/master/
 
 
 class Portfolio:
@@ -9,9 +10,11 @@ class Portfolio:
 
 
 class Stock:
-    def __init__(self, name, ticker):
+    def __init__(self, name, ticker, amount_purchased, purchase_date=d.today):
         self.name = name
         self.ticker = ticker
+        self.purchase_date = purchase_date
+        self.amount_purchased = amount_purchased
 
 
 def select_portfolio(portfolio_list):
@@ -24,11 +27,12 @@ def select_portfolio(portfolio_list):
 
 
 def add_stock_flow(stock_list):
-    # no error checking here yet
     run = 0
     while run == 0:
         stock_name = None
         stock_ticker = None
+        stock_date = None
+        stock_quantity = None
         while stock_name is None:
             stock_name = prompt.shortcuts.input_dialog(
                 title="Stock Name", text="Please type the stock name:"
@@ -37,7 +41,17 @@ def add_stock_flow(stock_list):
             stock_ticker = prompt.shortcuts.input_dialog(
                 title="Stock Ticker", text="Please type the stock ticker in all caps:"
                 ).run()
-        stock_list.append(Stock(stock_name, stock_ticker))
+        while stock_date is None:
+            stock_date = prompt.shortcuts.input_dialog(
+                title="Stock Purchase Date", text="Please type the date you purchased the stock in the form (DD,MM,YYYY):"
+            ).run()
+        year, month, day = map(int, stock_date.split(','))
+        stock_date = d(day, month, year)
+        while stock_quantity is None:
+            stock_quantity = prompt.shortcuts.input_dialog(
+                title="Stock Quantity Purchased", text="Please type the quantity of the stock you purchased:"
+            ).run()
+        stock_list.append(Stock(stock_name, stock_ticker, stock_quantity, stock_date))
         run = prompt.shortcuts.button_dialog(
             title="Add Another Stock",
             text="Would you like to add another stock?",
@@ -73,7 +87,7 @@ def select_stock(portfolio_list, portfolio_selected):
 
 # could make this a set of different functions
 def remove_portfolio(portfolio_list):
-    index = index_of_portfolio_id(portfolio_list,select_portfolio(portfolio_list))
+    index = index_of_portfolio_id(portfolio_list, select_portfolio(portfolio_list))
     portfolio_list.pop(index)
 
 def portfolio_management_tools(portfolio_management_action, portfolio_list, portfolio_selected):
