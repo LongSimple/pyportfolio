@@ -4,9 +4,11 @@ import pickle
 import os.path
 
 from pyportfolio.action_menus import show_main_menu, select_stock_action, show_portfolio_action_menu, \
-    show_portfolio_stock_action_menu, show_portfolio_management_action_menu
-from pyportfolio.portfolio_utils import select_portfolio, new_portfolio_flow, select_stock, Portfolio, Stock, \
-    portfolio_management_tools, remove_portfolio, select_stock_object
+    show_portfolio_stock_action_menu, show_portfolio_management_action_menu, portfolio_management_tools, \
+    select_portfolio
+
+from pyportfolio.portfolio_utils import new_portfolio_flow, select_stock, Portfolio, Stock, \
+    remove_portfolio, select_stock_object
 
 
 #add date based tools and notes for each method and refactor
