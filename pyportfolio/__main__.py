@@ -59,8 +59,7 @@ def main(loaded_portfolios):
                         # portfolio management tools flow
                         portfolio_management_action = menu.show_portfolio_management_actions(loaded_portfolios,
                                                                                              portfolio_selected)
-                        loaded_portfolios = menu.portfolio_management_tools(portfolio_management_action,
-                                                                            loaded_portfolios, portfolio_selected)
+                        loaded_portfolios = menu.portfolio_management_tools(loaded_portfolios, portfolio_selected, portfolio_management_action)
                         save_data(loaded_portfolios)
         if main_menu_selection == 2:
             # remove portfolio from the portfolio database.

@@ -1,5 +1,3 @@
-from datetime import date as d  # https://docs.python.org/3/library/datetime.html#datetime.date
-
 import math
 
 import prompt_toolkit as prompt
@@ -10,6 +8,10 @@ from pyportfolio.portfolio_utils import get_quote_table_field, select_stock, sel
 
 
 def show_main_menu():
+    """
+    This function shows the main menu and returns a menu selection.
+    :return: main menu action selection id.
+    """
     main_menu_selection = prompt.shortcuts.radiolist_dialog(
         values=[(0, "New Portfolio"), (1, "Existing Portfolio"), (2, "Delete Portfolio")],
         title="Main Menu",
@@ -35,6 +37,12 @@ def select_stock_action(portfolio_stock_choice):
 
 
 def show_portfolio_action_menu(portfolio_list, portfolio_selected):
+    """
+    This function allows you to select an action once you have selected a portfolio.
+    :param portfolio_list: list of portfolios
+    :param portfolio_selected: portfolio selected from list of portfolios.
+    :return: portfolio action selected.
+    """
     portfolio_action = prompt.shortcuts.radiolist_dialog(
         values=[(0, "Show Portfolio"), (1, "Manage Portfolio")],
         title=f"{portfolio_list[portfolio_selected].name}",
@@ -70,11 +78,14 @@ def show_portfolio_stock_actions(portfolio_stock_action, stock):
             buttons=[("Okay", "ok")],
         ).run()
         return result
-        # percent change from purchase date
+    # percent change from purchase date
     elif portfolio_stock_action == 3:
         purchase_price = stock.data.loc[stock.purchase_date.strftime('%Y-%m-%d'), '4. close']
         current_price = si.get_live_price(stock.stock_ticker)
-        percent_change = ((purchase_price[0] - current_price) / purchase_price[0]) * 100
+        if current_price > purchase_price[0]:
+            percent_change = ((current_price - purchase_price[0]) / purchase_price[0]) * 100
+        elif purchase_price[0] < current_price:
+            percent_change = ((purchase_price[0] - current_price) / purchase_price[0]) * 100
         result = prompt.shortcuts.button_dialog(
             title="Percent Change from Purchase Date",
             text=f"The percent change from the purchase date is: {round(percent_change, 2)}%.",
@@ -92,6 +103,12 @@ def show_portfolio_stock_actions(portfolio_stock_action, stock):
 
 
 def show_portfolio_management_actions(portfolio_list, portfolio_selected):
+    """
+    This function allows you to select a portfolio management action.
+    :param portfolio_list: portfolio list.
+    :param portfolio_selected: portfolio selected from list.
+    :return: Management action for portfolio selected.
+    """
     portfolio_management_action = prompt.shortcuts.radiolist_dialog(
         values=[(0, "Change Portfolio Name"), (1, "Remove Equity"), (2, "Add Equity")],
         title=f"{portfolio_list[portfolio_selected].name}",
@@ -114,7 +131,8 @@ def portfolio_management_tools(portfolio_list, portfolio_selected, portfolio_man
         return portfolio_list
     # remove equity
     elif portfolio_management_action == 1:
-        portfolio_list = remove_stock(portfolio_list, portfolio_selected)
+        portfolio_list2 = remove_stock(portfolio_list, portfolio_selected)
+        portfolio_list =portfolio_list2
         return portfolio_list
     # add equity
     elif portfolio_management_action == 2:
@@ -136,8 +154,9 @@ def remove_stock(portfolio_list, portfolio_selected):
     """
     stock_selected = select_stock(portfolio_list, portfolio_selected)
     index_of_stock_selected = index_of_ticker(portfolio_list[portfolio_selected].stock_list, stock_selected)
-    portfolio_list = portfolio_list[portfolio_selected].stock_list.pop(index_of_stock_selected)
+    portfolio_list[portfolio_selected].stock_list.pop(index_of_stock_selected)
     return portfolio_list
+
 
 def change_portfolio_name(portfolio_list, portfolio_selected, give_prompt=0, name=None):
     """
@@ -158,6 +177,11 @@ def change_portfolio_name(portfolio_list, portfolio_selected, give_prompt=0, nam
 
 
 def select_portfolio(portfolio_list):
+    """
+    This function prompts you to select a portfolio from a list of portfolios and returns the selected portfolio.
+    :param portfolio_list: list of portfolios.
+    :return: Portfolio selected.
+    """
     portfolio_selected = prompt.shortcuts.radiolist_dialog(
         values=[(x.portfolio_id, x.name) for x in portfolio_list],
         title="Portfolio List",

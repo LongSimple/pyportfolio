@@ -1,4 +1,4 @@
-from datetime import date as d  # https://docs.python.org/3/library/datetime.html#datetime.date
+import datetime  # https://docs.python.org/3/library/datetime.html#datetime.date
 import prompt_toolkit as prompt  # https://python-prompt-toolkit.readthedocs.io/en/master/
 from alpha_vantage.timeseries import TimeSeries  # https://alpha-vantage.readthedocs.io/en/latest/
 from yahoo_fin import stock_info as si  # http://theautomatic.net/yahoo_fin-documentation/
@@ -70,7 +70,7 @@ def add_stock_flow(stock_list):
                 text="Please type the date you purchased the stock in the form (YYYY,MM,DD) weekends do not work:"
             ).run()
         year, month, day = map(int, stock_date.split(','))
-        stock_date = d(year, month, day)
+        stock_date = datetime.date(year, month, day)
         while stock_quantity is None:
             stock_quantity = prompt.shortcuts.input_dialog(
                 title="Stock Quantity Purchased", text="Please type the quantity of the stock you purchased:"
